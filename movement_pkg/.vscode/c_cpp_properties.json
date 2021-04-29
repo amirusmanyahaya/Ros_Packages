@@ -1,0 +1,21 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/ameer/catkin_ws/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/ameer/catkin_ws/src/person/include/**",
+        "/home/ameer/catkin_ws/src/practice/include/**",
+        "/home/ameer/catkin_ws/src/turtlebot3_simulations/turtlebot3_fake/include/**",
+        "/home/ameer/catkin_ws/src/turtlebot3_simulations/turtlebot3_gazebo/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}
