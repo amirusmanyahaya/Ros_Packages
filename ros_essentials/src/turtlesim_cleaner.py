@@ -41,7 +41,7 @@ def rotate(velocity_publisher,ang_speed,rotation_ang, clockwise):
     else:
         velocity.angular.z = ang_speed
     
-    rate = rospy.Rate(100)
+    rate = rospy.Rate(10)
     t0 = rospy.Time().now().to_sec()
     while not rospy.is_shutdown():
         velocity_publisher.publish(velocity)
@@ -80,6 +80,32 @@ def move_to_point(publisher, end_x, end_y):
         if(distance < 0.01):
             break
 
+def set_desired_orientation(publisher, speed,direction):
+    global yaw
+    relative_ang = math.radians(direction) - yaw
+
+    if relative_ang < 0 :
+        clockwise = True
+    else:
+        clockwise = False
+    
+    relative_ang = math.degrees(abs(relative_ang))
+
+    rotate(publisher, speed, relative_ang, clockwise)
+
+def spiral_movement(publisher, lin_speed, ang_speed,desired_x, desired_y):
+    global x,y
+
+    velocity = Twist()
+
+    rate = rospy.Rate(1)
+    while x < desired_x and y < desired_y:
+        lin_speed = lin_speed + 1
+        velocity.linear.x = lin_speed
+        velocity.angular.z = ang_speed
+        publisher.publish(velocity)
+        rate.sleep()
+
 
 if __name__ == '__main__':
     try:
@@ -88,8 +114,10 @@ if __name__ == '__main__':
         # speed,stop_x = (float(sys.argv[1]),float(sys.argv[2]))
         rospy.Subscriber('/turtle1/pose', Pose, callback)
         rospy.sleep(2)
-        # move(velocity_publisher, 3.0 , 7.0, is_forward=True)
-        # rotate(velocity_publisher, 5.0, 180, clockwise=False)
-        move_to_point(velocity_publisher,5.0, 5.0)
+        move(velocity_publisher, 3.0 , 7.0, is_forward=True)
+        rotate(velocity_publisher, 5.0, 180, clockwise=False)
+        move_to_point(velocity_publisher,3.0, 3.0)
+        spiral_movement(velocity_publisher, 0.0, 2.0, 9.5, 9.5)
+        set_desired_orientation(velocity_publisher, 10.0, 90)
     except rospy.ROSInterruptException:
         pass
